@@ -224,14 +224,15 @@ void SecureSessionMgr::ExpireAllPairings(const PeerId & peer, Transport::AdminId
 CHIP_ERROR SecureSessionMgr::NewPairing(const Optional<Transport::PeerAddress> & peerAddr, NodeId peerNodeId,
                                         PairingSession * pairing, SecureSession::SessionRole direction, Transport::AdminId admin)
 {
-    uint16_t peerKeyId          = pairing->GetPeerKeyId();
-    uint16_t localKeyId         = pairing->GetLocalKeyId();
+    uint16_t peerKeyId  = pairing->GetPeerKeyId();
+    uint16_t localKeyId = pairing->GetLocalKeyId();
 
     PeerId peerId(peerNodeId, admin);
     PeerConnectionState * state = mPeerConnections.FindPeerConnectionState(peerId, admin, peerKeyId);
 
     // Find any existing connection with the same node and key ID
-    if (state && (state->GetPeerCache()->GetAdminId() == Transport::kUndefinedAdminId || state->GetPeerCache()->GetAdminId() == admin))
+    if (state &&
+        (state->GetPeerCache()->GetAdminId() == Transport::kUndefinedAdminId || state->GetPeerCache()->GetAdminId() == admin))
     {
         mPeerConnections.MarkConnectionExpired(
             state, [this](const Transport::PeerConnectionState & state1) { HandleConnectionExpired(state1); });
@@ -354,7 +355,8 @@ void SecureSessionMgr::SecureMessageDispatch(const PacketHeader & packetHeader, 
         {
             // Queue and start message sync procedure
             err = mMessageCounterManager->QueueReceivedMessageAndStartSync(
-                packetHeader, { state->GetPeerCache()->GetPeer().GetNodeId(), state->GetPeerKeyID(), state->GetPeerCache()->GetAdminId() }, state,
+                packetHeader,
+                { state->GetPeerCache()->GetPeer().GetNodeId(), state->GetPeerKeyID(), state->GetPeerCache()->GetAdminId() }, state,
                 peerAddress, std::move(msg));
 
             if (err != CHIP_NO_ERROR)
@@ -488,7 +490,8 @@ void SecureSessionMgr::SecureMessageDispatch(const PacketHeader & packetHeader, 
 
     if (mCB != nullptr)
     {
-        SecureSessionHandle session(state->GetPeerCache()->GetPeer().GetNodeId(), state->GetPeerKeyID(), state->GetPeerCache()->GetAdminId());
+        SecureSessionHandle session(state->GetPeerCache()->GetPeer().GetNodeId(), state->GetPeerKeyID(),
+                                    state->GetPeerCache()->GetAdminId());
         mCB->OnMessageReceived(packetHeader, payloadHeader, session, peerAddress, isDuplicate, std::move(msg));
     }
 
@@ -506,7 +509,8 @@ void SecureSessionMgr::HandleConnectionExpired(const Transport::PeerConnectionSt
 
     if (mCB != nullptr)
     {
-        mCB->OnConnectionExpired({ state.GetPeerCache()->GetPeer().GetNodeId(), state.GetPeerKeyID(), state.GetPeerCache()->GetAdminId() });
+        mCB->OnConnectionExpired(
+            { state.GetPeerCache()->GetPeer().GetNodeId(), state.GetPeerKeyID(), state.GetPeerCache()->GetAdminId() });
     }
 
     mTransportMgr->Disconnect(state.GetPeerCache()->GetPeerAddress());
@@ -527,7 +531,8 @@ void SecureSessionMgr::ExpiryTimerCallback(System::Layer * layer, void * param, 
 
 PeerConnectionState * SecureSessionMgr::GetPeerConnectionState(SecureSessionHandle session)
 {
-    return mPeerConnections.FindPeerConnectionState(PeerId{session.mPeerNodeId, kUndefinedFabricId}, session.mAdmin, session.mPeerKeyId);
+    return mPeerConnections.FindPeerConnectionState(PeerId{ session.mPeerNodeId, kUndefinedFabricId }, session.mAdmin,
+                                                    session.mPeerKeyId);
 }
 
 } // namespace chip

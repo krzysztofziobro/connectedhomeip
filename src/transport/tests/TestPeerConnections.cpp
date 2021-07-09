@@ -34,9 +34,9 @@ namespace {
 using namespace chip;
 using namespace chip::Transport;
 
-constexpr PeerId kPeer1 = PeerId{123, kUndefinedFabricId};
-constexpr PeerId kPeer2 = PeerId{6, kUndefinedFabricId};
-constexpr PeerId kPeer3 = PeerId{81, kUndefinedFabricId};
+constexpr PeerId kPeer1 = PeerId{ 123, kUndefinedFabricId };
+constexpr PeerId kPeer2 = PeerId{ 6, kUndefinedFabricId };
+constexpr PeerId kPeer3 = PeerId{ 81, kUndefinedFabricId };
 
 void TestBasicFunctionality(nlTestSuite * inSuite, void * inContext)
 {
@@ -95,7 +95,7 @@ void TestFindByPeer(nlTestSuite * inSuite, void * inContext)
 
 struct ExpiredCallInfo
 {
-    int callCount         = 0;
+    int callCount = 0;
     PeerId lastCallPeer;
 };
 
