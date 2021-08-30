@@ -90,6 +90,8 @@ template("chip_data_model") {
       "${_app_root}/clusters/scenes/scenes-tokens.h",
       "${_app_root}/clusters/scenes/scenes.h",
       "${_app_root}/clusters/temperature-measurement-server/temperature-measurement-server.h",
+      "${_app_root}/clusters/time-synchronization-server/time-synchronization-server.h",
+      "${_app_root}/clusters/time-synchronization-server/time-synchronization-server.cpp",
       "${_app_root}/clusters/zll-level-control-server/zll-level-control-server.h",
       "${_app_root}/clusters/zll-on-off-server/zll-on-off-server.h",
       "${_app_root}/clusters/zll-scenes-server/zll-scenes-server.h",

@@ -122,6 +122,14 @@ typedef struct _DiscoverAttributesInfoRecord
     uint8_t attributeType;
 } EmberAfDiscoverAttributesInfoRecord;
 
+// Struct for DstOffsetType
+typedef struct _DstOffsetType
+{
+    int32_t Offset;
+    uint64_t ValidStarting;
+    uint64_t ValidUntil;
+} EmberAfDstOffsetType;
+
 // Struct for ExtendedDiscoverAttributesInfoRecord
 typedef struct _ExtendedDiscoverAttributesInfoRecord
 {
@@ -368,6 +376,14 @@ typedef struct _ThreadMetrics
     uint32_t StackFreeMinimum;
     uint32_t StackSize;
 } EmberAfThreadMetrics;
+
+// Struct for TimeZoneType
+typedef struct _TimeZoneType
+{
+    int32_t Offset;
+    uint64_t ValidAt;
+    chip::ByteSpan Name;
+} EmberAfTimeZoneType;
 
 // Struct for TransferredPhase
 typedef struct _TransferredPhase

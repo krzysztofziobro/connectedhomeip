@@ -2223,6 +2223,74 @@ EmberAfStatus SetTimeSinceReset(chip::EndpointId endpoint, uint64_t timeSinceRes
 } // namespace Attributes
 } // namespace EthernetNetworkDiagnostics
 
+namespace TimeSync {
+namespace Attributes {
+EmberAfStatus GetUTCTime(chip::EndpointId endpoint, uint64_t * uTCTime)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::UTCTime, (uint8_t *) uTCTime, sizeof(*uTCTime));
+}
+EmberAfStatus SetUTCTime(chip::EndpointId endpoint, uint64_t uTCTime)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::UTCTime, (uint8_t *) &uTCTime, ZCL_INT64U_ATTRIBUTE_TYPE);
+}
+EmberAfStatus GetGranularity(chip::EndpointId endpoint, uint8_t * granularity)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::Granularity, (uint8_t *) granularity, sizeof(*granularity));
+}
+EmberAfStatus SetGranularity(chip::EndpointId endpoint, uint8_t granularity)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::Granularity, (uint8_t *) &granularity,
+                                       ZCL_ENUM8_ATTRIBUTE_TYPE);
+}
+EmberAfStatus GetTimeSource(chip::EndpointId endpoint, uint8_t * timeSource)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::TimeSource, (uint8_t *) timeSource, sizeof(*timeSource));
+}
+EmberAfStatus SetTimeSource(chip::EndpointId endpoint, uint8_t timeSource)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::TimeSource, (uint8_t *) &timeSource, ZCL_ENUM8_ATTRIBUTE_TYPE);
+}
+EmberAfStatus GetTrustedTimeNodeId(chip::EndpointId endpoint, chip::NodeId * trustedTimeNodeId)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::TrustedTimeNodeId, (uint8_t *) trustedTimeNodeId,
+                                      sizeof(*trustedTimeNodeId));
+}
+EmberAfStatus SetTrustedTimeNodeId(chip::EndpointId endpoint, chip::NodeId trustedTimeNodeId)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::TrustedTimeNodeId, (uint8_t *) &trustedTimeNodeId,
+                                       ZCL_NODE_ID_ATTRIBUTE_TYPE);
+}
+EmberAfStatus GetLocalTime(chip::EndpointId endpoint, uint64_t * localTime)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::LocalTime, (uint8_t *) localTime, sizeof(*localTime));
+}
+EmberAfStatus SetLocalTime(chip::EndpointId endpoint, uint64_t localTime)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::LocalTime, (uint8_t *) &localTime, ZCL_INT64U_ATTRIBUTE_TYPE);
+}
+EmberAfStatus GetTimeZoneDatabase(chip::EndpointId endpoint, bool * timeZoneDatabase)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::TimeZoneDatabase, (uint8_t *) timeZoneDatabase,
+                                      sizeof(*timeZoneDatabase));
+}
+EmberAfStatus SetTimeZoneDatabase(chip::EndpointId endpoint, bool timeZoneDatabase)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::TimeZoneDatabase, (uint8_t *) &timeZoneDatabase,
+                                       ZCL_BOOLEAN_ATTRIBUTE_TYPE);
+}
+EmberAfStatus GetNtpServerPort(chip::EndpointId endpoint, int16_t * ntpServerPort)
+{
+    return emberAfReadServerAttribute(endpoint, TimeSync::Id, Ids::NtpServerPort, (uint8_t *) ntpServerPort,
+                                      sizeof(*ntpServerPort));
+}
+EmberAfStatus SetNtpServerPort(chip::EndpointId endpoint, int16_t ntpServerPort)
+{
+    return emberAfWriteServerAttribute(endpoint, TimeSync::Id, Ids::NtpServerPort, (uint8_t *) &ntpServerPort,
+                                       ZCL_INT16S_ATTRIBUTE_TYPE);
+}
+} // namespace Attributes
+} // namespace TimeSync
+
 namespace BridgedDeviceBasic {
 namespace Attributes {
 EmberAfStatus GetVendorID(chip::EndpointId endpoint, uint16_t * vendorID)

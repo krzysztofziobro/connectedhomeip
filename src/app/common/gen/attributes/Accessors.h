@@ -572,6 +572,25 @@ EmberAfStatus SetTimeSinceReset(chip::EndpointId endpoint, uint64_t timeSinceRes
 } // namespace Attributes
 } // namespace EthernetNetworkDiagnostics
 
+namespace TimeSync {
+namespace Attributes {
+EmberAfStatus GetUTCTime(chip::EndpointId endpoint, uint64_t * uTCTime); // int64u
+EmberAfStatus SetUTCTime(chip::EndpointId endpoint, uint64_t uTCTime);
+EmberAfStatus GetGranularity(chip::EndpointId endpoint, uint8_t * granularity); // enum8
+EmberAfStatus SetGranularity(chip::EndpointId endpoint, uint8_t granularity);
+EmberAfStatus GetTimeSource(chip::EndpointId endpoint, uint8_t * timeSource); // enum8
+EmberAfStatus SetTimeSource(chip::EndpointId endpoint, uint8_t timeSource);
+EmberAfStatus GetTrustedTimeNodeId(chip::EndpointId endpoint, chip::NodeId * trustedTimeNodeId); // node_id
+EmberAfStatus SetTrustedTimeNodeId(chip::EndpointId endpoint, chip::NodeId trustedTimeNodeId);
+EmberAfStatus GetLocalTime(chip::EndpointId endpoint, uint64_t * localTime); // int64u
+EmberAfStatus SetLocalTime(chip::EndpointId endpoint, uint64_t localTime);
+EmberAfStatus GetTimeZoneDatabase(chip::EndpointId endpoint, bool * timeZoneDatabase); // boolean
+EmberAfStatus SetTimeZoneDatabase(chip::EndpointId endpoint, bool timeZoneDatabase);
+EmberAfStatus GetNtpServerPort(chip::EndpointId endpoint, int16_t * ntpServerPort); // int16s
+EmberAfStatus SetNtpServerPort(chip::EndpointId endpoint, int16_t ntpServerPort);
+} // namespace Attributes
+} // namespace TimeSync
+
 namespace BridgedDeviceBasic {
 namespace Attributes {
 EmberAfStatus GetVendorID(chip::EndpointId endpoint, uint16_t * vendorID); // int16u

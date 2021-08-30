@@ -439,6 +439,23 @@ static constexpr AttributeId TimeSinceReset = 0x00000008;
 } // namespace Attributes
 } // namespace EthernetNetworkDiagnostics
 
+namespace TimeSync {
+namespace Attributes {
+namespace Ids {
+static constexpr AttributeId UTCTime           = 0x00000001;
+static constexpr AttributeId Granularity       = 0x00000002;
+static constexpr AttributeId TimeSource        = 0x00000003;
+static constexpr AttributeId TrustedTimeNodeId = 0x00000004;
+static constexpr AttributeId DefaultNtp        = 0x00000005;
+static constexpr AttributeId TimeZone          = 0x00000006;
+static constexpr AttributeId DstOffset         = 0x00000007;
+static constexpr AttributeId LocalTime         = 0x00000008;
+static constexpr AttributeId TimeZoneDatabase  = 0x00000009;
+static constexpr AttributeId NtpServerPort     = 0x0000000A;
+} // namespace Ids
+} // namespace Attributes
+} // namespace TimeSync
+
 namespace BridgedDeviceBasic {
 namespace Attributes {
 namespace Ids {

@@ -100,6 +100,9 @@ static constexpr chip::ClusterId ZCL_WIFI_NETWORK_DIAGNOSTICS_CLUSTER_ID = 0x003
 // Definitions for cluster: Ethernet Network Diagnostics
 static constexpr chip::ClusterId ZCL_ETHERNET_NETWORK_DIAGNOSTICS_CLUSTER_ID = 0x0037;
 
+// Definitions for cluster: TimeSync
+static constexpr chip::ClusterId ZCL_TIMESYNC_CLUSTER_ID = 0x0038;
+
 // Definitions for cluster: Bridged Device Basic
 static constexpr chip::ClusterId ZCL_BRIDGED_DEVICE_BASIC_CLUSTER_ID = 0x0039;
 

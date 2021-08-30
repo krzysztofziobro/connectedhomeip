@@ -321,6 +321,14 @@ static constexpr CommandId ResetCounts = 0x00000000;
 } // namespace Commands
 } // namespace EthernetNetworkDiagnostics
 
+namespace TimeSync {
+namespace Commands {
+namespace Ids {
+static constexpr CommandId SetUtcTime = 0x00000000;
+} // namespace Ids
+} // namespace Commands
+} // namespace TimeSync
+
 namespace BridgedDeviceBasic {
 namespace Commands {
 namespace Ids {

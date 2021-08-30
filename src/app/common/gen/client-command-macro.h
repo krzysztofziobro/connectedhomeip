@@ -2173,6 +2173,18 @@
                                                                                                                                    \
                                                                       ZCL_RESET_COUNTS_COMMAND_ID, "", );
 
+/** @brief Command description for SetUtcTime
+ *
+ * Command: SetUtcTime
+ * @param UtcTime INT64U
+ * @param Granularity GranularityEnum
+ * @param TimeSource TimeSourceEnum
+ */
+#define emberAfFillCommandTimeSyncClusterSetUtcTime(UtcTime, Granularity, TimeSource)                                              \
+    emberAfFillExternalBuffer(mask,                                                                                                \
+                                                                                                                                   \
+                              ZCL_SET_UTC_TIME_COMMAND_ID, "uuu", UtcTime, Granularity, TimeSource);
+
 /** @brief Command description for StartUp
  *
  * Command: StartUp

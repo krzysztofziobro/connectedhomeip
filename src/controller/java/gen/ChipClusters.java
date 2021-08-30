@@ -5671,6 +5671,75 @@ public class ChipClusters {
         long chipClusterPtr, IntegerAttributeCallback callback);
   }
 
+  public static class TimeSyncCluster extends BaseChipCluster {
+    public TimeSyncCluster(long devicePtr, int endpointId) {
+      super(devicePtr, endpointId);
+    }
+
+    @Override
+    public native long initWithDevice(long devicePtr, int endpointId);
+
+    public void setUtcTime(
+        DefaultClusterCallback callback, long utcTime, int granularity, int timeSource) {
+      setUtcTime(chipClusterPtr, callback, utcTime, granularity, timeSource);
+    }
+
+    private native void setUtcTime(
+        long chipClusterPtr,
+        DefaultClusterCallback callback,
+        long utcTime,
+        int granularity,
+        int timeSource);
+
+    public void readUTCTimeAttribute(LongAttributeCallback callback) {
+      readUTCTimeAttribute(chipClusterPtr, callback);
+    }
+
+    public void readGranularityAttribute(IntegerAttributeCallback callback) {
+      readGranularityAttribute(chipClusterPtr, callback);
+    }
+
+    public void readTrustedTimeNodeIdAttribute(LongAttributeCallback callback) {
+      readTrustedTimeNodeIdAttribute(chipClusterPtr, callback);
+    }
+
+    public void writeTrustedTimeNodeIdAttribute(DefaultClusterCallback callback, long value) {
+      writeTrustedTimeNodeIdAttribute(chipClusterPtr, callback, value);
+    }
+
+    public void readNtpServerPortAttribute(IntegerAttributeCallback callback) {
+      readNtpServerPortAttribute(chipClusterPtr, callback);
+    }
+
+    public void writeNtpServerPortAttribute(DefaultClusterCallback callback, int value) {
+      writeNtpServerPortAttribute(chipClusterPtr, callback, value);
+    }
+
+    public void readClusterRevisionAttribute(IntegerAttributeCallback callback) {
+      readClusterRevisionAttribute(chipClusterPtr, callback);
+    }
+
+    private native void readUTCTimeAttribute(long chipClusterPtr, LongAttributeCallback callback);
+
+    private native void readGranularityAttribute(
+        long chipClusterPtr, IntegerAttributeCallback callback);
+
+    private native void readTrustedTimeNodeIdAttribute(
+        long chipClusterPtr, LongAttributeCallback callback);
+
+    private native void writeTrustedTimeNodeIdAttribute(
+        long chipClusterPtr, DefaultClusterCallback callback, long value);
+
+    private native void readNtpServerPortAttribute(
+        long chipClusterPtr, IntegerAttributeCallback callback);
+
+    private native void writeNtpServerPortAttribute(
+        long chipClusterPtr, DefaultClusterCallback callback, int value);
+
+    private native void readClusterRevisionAttribute(
+        long chipClusterPtr, IntegerAttributeCallback callback);
+  }
+
   public static class WakeOnLanCluster extends BaseChipCluster {
     public WakeOnLanCluster(long devicePtr, int endpointId) {
       super(devicePtr, endpointId);

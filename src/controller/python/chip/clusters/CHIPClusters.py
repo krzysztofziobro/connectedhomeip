@@ -3264,6 +3264,50 @@ class ChipClusters:
                 },
             },
     }
+    _TIME_SYNC_CLUSTER_INFO = {
+            "clusterName": "TimeSync",
+            "clusterId": 0x00000038,
+            "commands": {
+            0x00000000: {
+                    "commandId": 0x00000000,
+                    "commandName": "SetUtcTime",
+                    "args": {
+                        "utcTime": "int",
+                        "granularity": "int",
+                        "timeSource": "int",
+                    },
+                },
+            },
+            "attributes": {
+                0x00000001: {
+                    "attributeName": "UTCTime",
+                    "attributeId": 0x00000001,
+                    "type": "int",
+                },
+                0x00000002: {
+                    "attributeName": "Granularity",
+                    "attributeId": 0x00000002,
+                    "type": "int",
+                },
+                0x00000004: {
+                    "attributeName": "TrustedTimeNodeId",
+                    "attributeId": 0x00000004,
+                    "type": "int",
+                    "writable": True,
+                },
+                0x0000000A: {
+                    "attributeName": "NtpServerPort",
+                    "attributeId": 0x0000000A,
+                    "type": "int",
+                    "writable": True,
+                },
+                0x0000FFFD: {
+                    "attributeName": "ClusterRevision",
+                    "attributeId": 0x0000FFFD,
+                    "type": "int",
+                },
+            },
+    }
     _WAKE_ON_LAN_CLUSTER_INFO = {
             "clusterName": "WakeOnLan",
             "clusterId": 0x00000503,
@@ -3535,6 +3579,7 @@ class ChipClusters:
     0x00000201: _THERMOSTAT_CLUSTER_INFO,
     0x00000204: _THERMOSTAT_USER_INTERFACE_CONFIGURATION_CLUSTER_INFO,
     0x00000035: _THREAD_NETWORK_DIAGNOSTICS_CLUSTER_INFO,
+    0x00000038: _TIME_SYNC_CLUSTER_INFO,
     0x00000503: _WAKE_ON_LAN_CLUSTER_INFO,
     0x00000036: _WI_FI_NETWORK_DIAGNOSTICS_CLUSTER_INFO,
     0x00000102: _WINDOW_COVERING_CLUSTER_INFO,
@@ -3588,6 +3633,7 @@ class ChipClusters:
         "Thermostat": _THERMOSTAT_CLUSTER_INFO,
         "ThermostatUserInterfaceConfiguration": _THERMOSTAT_USER_INTERFACE_CONFIGURATION_CLUSTER_INFO,
         "ThreadNetworkDiagnostics": _THREAD_NETWORK_DIAGNOSTICS_CLUSTER_INFO,
+        "TimeSync": _TIME_SYNC_CLUSTER_INFO,
         "WakeOnLan": _WAKE_ON_LAN_CLUSTER_INFO,
         "WiFiNetworkDiagnostics": _WI_FI_NETWORK_DIAGNOSTICS_CLUSTER_INFO,
         "WindowCovering": _WINDOW_COVERING_CLUSTER_INFO,
@@ -4251,6 +4297,10 @@ class ChipClusters:
     def ClusterThreadNetworkDiagnostics_CommandResetCounts(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
         return self._chipLib.chip_ime_AppendCommand_ThreadNetworkDiagnostics_ResetCounts(
                 device, ZCLendpoint, ZCLgroupid
+        )
+    def ClusterTimeSync_CommandSetUtcTime(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int, utcTime: int, granularity: int, timeSource: int):
+        return self._chipLib.chip_ime_AppendCommand_TimeSync_SetUtcTime(
+                device, ZCLendpoint, ZCLgroupid, utcTime, granularity, timeSource
         )
     def ClusterWiFiNetworkDiagnostics_CommandResetCounts(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
         return self._chipLib.chip_ime_AppendCommand_WiFiNetworkDiagnostics_ResetCounts(
@@ -5076,6 +5126,20 @@ class ChipClusters:
         return self._chipLib.chip_ime_ReadAttribute_ThreadNetworkDiagnostics_ActiveNetworkFaultsList(device, ZCLendpoint, ZCLgroupid)
     def ClusterThreadNetworkDiagnostics_ReadAttributeClusterRevision(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
         return self._chipLib.chip_ime_ReadAttribute_ThreadNetworkDiagnostics_ClusterRevision(device, ZCLendpoint, ZCLgroupid)
+    def ClusterTimeSync_ReadAttributeUTCTime(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_ReadAttribute_TimeSync_UTCTime(device, ZCLendpoint, ZCLgroupid)
+    def ClusterTimeSync_ReadAttributeGranularity(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_ReadAttribute_TimeSync_Granularity(device, ZCLendpoint, ZCLgroupid)
+    def ClusterTimeSync_ReadAttributeTrustedTimeNodeId(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_ReadAttribute_TimeSync_TrustedTimeNodeId(device, ZCLendpoint, ZCLgroupid)
+    def ClusterTimeSync_WriteAttributeTrustedTimeNodeId(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int, value: int):
+        return self._chipLib.chip_ime_WriteAttribute_TimeSync_TrustedTimeNodeId(device, ZCLendpoint, ZCLgroupid, value)
+    def ClusterTimeSync_ReadAttributeNtpServerPort(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_ReadAttribute_TimeSync_NtpServerPort(device, ZCLendpoint, ZCLgroupid)
+    def ClusterTimeSync_WriteAttributeNtpServerPort(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int, value: int):
+        return self._chipLib.chip_ime_WriteAttribute_TimeSync_NtpServerPort(device, ZCLendpoint, ZCLgroupid, value)
+    def ClusterTimeSync_ReadAttributeClusterRevision(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
+        return self._chipLib.chip_ime_ReadAttribute_TimeSync_ClusterRevision(device, ZCLendpoint, ZCLgroupid)
     def ClusterWakeOnLan_ReadAttributeWakeOnLanMacAddress(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
         return self._chipLib.chip_ime_ReadAttribute_WakeOnLan_WakeOnLanMacAddress(device, ZCLendpoint, ZCLgroupid)
     def ClusterWakeOnLan_ReadAttributeClusterRevision(self, device: ctypes.c_void_p, ZCLendpoint: int, ZCLgroupid: int):
@@ -6816,6 +6880,31 @@ class ChipClusters:
         # Cluster ThreadNetworkDiagnostics ReadAttribute ClusterRevision
         self._chipLib.chip_ime_ReadAttribute_ThreadNetworkDiagnostics_ClusterRevision.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
         self._chipLib.chip_ime_ReadAttribute_ThreadNetworkDiagnostics_ClusterRevision.restype = ctypes.c_uint32
+        # Cluster TimeSync
+        # Cluster TimeSync Command SetUtcTime
+        self._chipLib.chip_ime_AppendCommand_TimeSync_SetUtcTime.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_uint64, ctypes.c_uint8, ctypes.c_uint8]
+        self._chipLib.chip_ime_AppendCommand_TimeSync_SetUtcTime.restype = ctypes.c_uint32
+        # Cluster TimeSync ReadAttribute UTCTime
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_UTCTime.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_UTCTime.restype = ctypes.c_uint32
+        # Cluster TimeSync ReadAttribute Granularity
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_Granularity.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_Granularity.restype = ctypes.c_uint32
+        # Cluster TimeSync ReadAttribute TrustedTimeNodeId
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_TrustedTimeNodeId.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_TrustedTimeNodeId.restype = ctypes.c_uint32
+        # Cluster TimeSync WriteAttribute TrustedTimeNodeId
+        self._chipLib.chip_ime_WriteAttribute_TimeSync_TrustedTimeNodeId.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_uint64]
+        self._chipLib.chip_ime_WriteAttribute_TimeSync_TrustedTimeNodeId.restype = ctypes.c_uint32
+        # Cluster TimeSync ReadAttribute NtpServerPort
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_NtpServerPort.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_NtpServerPort.restype = ctypes.c_uint32
+        # Cluster TimeSync WriteAttribute NtpServerPort
+        self._chipLib.chip_ime_WriteAttribute_TimeSync_NtpServerPort.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16, ctypes.c_int16]
+        self._chipLib.chip_ime_WriteAttribute_TimeSync_NtpServerPort.restype = ctypes.c_uint32
+        # Cluster TimeSync ReadAttribute ClusterRevision
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_ClusterRevision.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]
+        self._chipLib.chip_ime_ReadAttribute_TimeSync_ClusterRevision.restype = ctypes.c_uint32
         # Cluster WakeOnLan
         # Cluster WakeOnLan ReadAttribute WakeOnLanMacAddress
         self._chipLib.chip_ime_ReadAttribute_WakeOnLan_WakeOnLanMacAddress.argtypes = [ctypes.c_void_p, ctypes.c_uint8, ctypes.c_uint16]

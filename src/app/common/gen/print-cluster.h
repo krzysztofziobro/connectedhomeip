@@ -183,6 +183,12 @@
 #define CHIP_PRINTCLUSTER_ETHERNET_NETWORK_DIAGNOSTICS_CLUSTER
 #endif
 
+#if defined(ZCL_USING_TIMESYNC_CLUSTER_SERVER) || defined(ZCL_USING_TIMESYNC_CLUSTER_CLIENT)
+#define CHIP_PRINTCLUSTER_TIMESYNC_CLUSTER { ZCL_TIMESYNC_CLUSTER_ID, 56, "TimeSync" },
+#else
+#define CHIP_PRINTCLUSTER_TIMESYNC_CLUSTER
+#endif
+
 #if defined(ZCL_USING_BRIDGED_DEVICE_BASIC_CLUSTER_SERVER) || defined(ZCL_USING_BRIDGED_DEVICE_BASIC_CLUSTER_CLIENT)
 #define CHIP_PRINTCLUSTER_BRIDGED_DEVICE_BASIC_CLUSTER { ZCL_BRIDGED_DEVICE_BASIC_CLUSTER_ID, 57, "Bridged Device Basic" },
 #else
@@ -752,6 +758,7 @@
     CHIP_PRINTCLUSTER_THREAD_NETWORK_DIAGNOSTICS_CLUSTER                                                                           \
     CHIP_PRINTCLUSTER_WIFI_NETWORK_DIAGNOSTICS_CLUSTER                                                                             \
     CHIP_PRINTCLUSTER_ETHERNET_NETWORK_DIAGNOSTICS_CLUSTER                                                                         \
+    CHIP_PRINTCLUSTER_TIMESYNC_CLUSTER                                                                                             \
     CHIP_PRINTCLUSTER_BRIDGED_DEVICE_BASIC_CLUSTER                                                                                 \
     CHIP_PRINTCLUSTER_SWITCH_CLUSTER                                                                                               \
     CHIP_PRINTCLUSTER_ADMINISTRATOR_COMMISSIONING_CLUSTER                                                                          \

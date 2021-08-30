@@ -1164,6 +1164,7 @@ static void OnThreadNetworkDiagnosticsActiveNetworkFaultsListListAttributeRespon
 | Thermostat                                                          | 0x0201 |
 | ThermostatUserInterfaceConfiguration                                | 0x0204 |
 | ThreadNetworkDiagnostics                                            | 0x0035 |
+| TimeSync                                                            | 0x0038 |
 | WakeOnLan                                                           | 0x0503 |
 | WiFiNetworkDiagnostics                                              | 0x0036 |
 | WindowCovering                                                      | 0x0102 |
@@ -1216,6 +1217,7 @@ constexpr chip::ClusterId kTestClusterClusterId                          = 0x050
 constexpr chip::ClusterId kThermostatClusterId                           = 0x0201;
 constexpr chip::ClusterId kThermostatUserInterfaceConfigurationClusterId = 0x0204;
 constexpr chip::ClusterId kThreadNetworkDiagnosticsClusterId             = 0x0035;
+constexpr chip::ClusterId kTimeSyncClusterId                             = 0x0038;
 constexpr chip::ClusterId kWakeOnLanClusterId                            = 0x0503;
 constexpr chip::ClusterId kWiFiNetworkDiagnosticsClusterId               = 0x0036;
 constexpr chip::ClusterId kWindowCoveringClusterId                       = 0x0102;
@@ -22262,6 +22264,324 @@ private:
 };
 
 /*----------------------------------------------------------------------------*\
+| Cluster TimeSync                                                    | 0x0038 |
+|------------------------------------------------------------------------------|
+| Commands:                                                           |        |
+| * SetUtcTime                                                        |   0x00 |
+|------------------------------------------------------------------------------|
+| Attributes:                                                         |        |
+| * UTCTime                                                           | 0x0001 |
+| * Granularity                                                       | 0x0002 |
+| * TrustedTimeNodeId                                                 | 0x0004 |
+| * NtpServerPort                                                     | 0x000A |
+| * ClusterRevision                                                   | 0xFFFD |
+\*----------------------------------------------------------------------------*/
+
+/*
+ * Command SetUtcTime
+ */
+class TimeSyncSetUtcTime : public ModelCommand
+{
+public:
+    TimeSyncSetUtcTime() : ModelCommand("set-utc-time")
+    {
+        AddArgument("UtcTime", 0, UINT64_MAX, &mUtcTime);
+        AddArgument("Granularity", 0, UINT8_MAX, &mGranularity);
+        AddArgument("TimeSource", 0, UINT8_MAX, &mTimeSource);
+        ModelCommand::AddArguments();
+    }
+    ~TimeSyncSetUtcTime()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x00) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.SetUtcTime(onSuccessCallback->Cancel(), onFailureCallback->Cancel(), mUtcTime, mGranularity, mTimeSource);
+    }
+
+private:
+    chip::Callback::Callback<DefaultSuccessCallback> * onSuccessCallback =
+        new chip::Callback::Callback<DefaultSuccessCallback>(OnDefaultSuccessResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+    uint64_t mUtcTime;
+    uint8_t mGranularity;
+    uint8_t mTimeSource;
+};
+
+/*
+ * Discover Attributes
+ */
+class DiscoverTimeSyncAttributes : public ModelCommand
+{
+public:
+    DiscoverTimeSyncAttributes() : ModelCommand("discover") { ModelCommand::AddArguments(); }
+
+    ~DiscoverTimeSyncAttributes()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0000) command (0x0C) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.DiscoverAttributes(onSuccessCallback->Cancel(), onFailureCallback->Cancel());
+    }
+
+private:
+    chip::Callback::Callback<DefaultSuccessCallback> * onSuccessCallback =
+        new chip::Callback::Callback<DefaultSuccessCallback>(OnDefaultSuccessResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+};
+
+/*
+ * Attribute UTCTime
+ */
+class ReadTimeSyncUTCTime : public ModelCommand
+{
+public:
+    ReadTimeSyncUTCTime() : ModelCommand("read")
+    {
+        AddArgument("attr-name", "utctime");
+        ModelCommand::AddArguments();
+    }
+
+    ~ReadTimeSyncUTCTime()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x00) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.ReadAttributeUTCTime(onSuccessCallback->Cancel(), onFailureCallback->Cancel());
+    }
+
+private:
+    chip::Callback::Callback<Int64uAttributeCallback> * onSuccessCallback =
+        new chip::Callback::Callback<Int64uAttributeCallback>(OnInt64uAttributeResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+};
+
+/*
+ * Attribute Granularity
+ */
+class ReadTimeSyncGranularity : public ModelCommand
+{
+public:
+    ReadTimeSyncGranularity() : ModelCommand("read")
+    {
+        AddArgument("attr-name", "granularity");
+        ModelCommand::AddArguments();
+    }
+
+    ~ReadTimeSyncGranularity()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x00) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.ReadAttributeGranularity(onSuccessCallback->Cancel(), onFailureCallback->Cancel());
+    }
+
+private:
+    chip::Callback::Callback<Int8uAttributeCallback> * onSuccessCallback =
+        new chip::Callback::Callback<Int8uAttributeCallback>(OnInt8uAttributeResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+};
+
+/*
+ * Attribute TrustedTimeNodeId
+ */
+class ReadTimeSyncTrustedTimeNodeId : public ModelCommand
+{
+public:
+    ReadTimeSyncTrustedTimeNodeId() : ModelCommand("read")
+    {
+        AddArgument("attr-name", "trusted-time-node-id");
+        ModelCommand::AddArguments();
+    }
+
+    ~ReadTimeSyncTrustedTimeNodeId()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x00) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.ReadAttributeTrustedTimeNodeId(onSuccessCallback->Cancel(), onFailureCallback->Cancel());
+    }
+
+private:
+    chip::Callback::Callback<Int64uAttributeCallback> * onSuccessCallback =
+        new chip::Callback::Callback<Int64uAttributeCallback>(OnInt64uAttributeResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+};
+
+class WriteTimeSyncTrustedTimeNodeId : public ModelCommand
+{
+public:
+    WriteTimeSyncTrustedTimeNodeId() : ModelCommand("write")
+    {
+        AddArgument("attr-name", "trusted-time-node-id");
+        AddArgument("attr-value", 0, UINT64_MAX, &mValue);
+        ModelCommand::AddArguments();
+    }
+
+    ~WriteTimeSyncTrustedTimeNodeId()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x01) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.WriteAttributeTrustedTimeNodeId(onSuccessCallback->Cancel(), onFailureCallback->Cancel(), mValue);
+    }
+
+private:
+    chip::Callback::Callback<DefaultSuccessCallback> * onSuccessCallback =
+        new chip::Callback::Callback<DefaultSuccessCallback>(OnDefaultSuccessResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+    chip::NodeId mValue;
+};
+
+/*
+ * Attribute NtpServerPort
+ */
+class ReadTimeSyncNtpServerPort : public ModelCommand
+{
+public:
+    ReadTimeSyncNtpServerPort() : ModelCommand("read")
+    {
+        AddArgument("attr-name", "ntp-server-port");
+        ModelCommand::AddArguments();
+    }
+
+    ~ReadTimeSyncNtpServerPort()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x00) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.ReadAttributeNtpServerPort(onSuccessCallback->Cancel(), onFailureCallback->Cancel());
+    }
+
+private:
+    chip::Callback::Callback<Int16sAttributeCallback> * onSuccessCallback =
+        new chip::Callback::Callback<Int16sAttributeCallback>(OnInt16sAttributeResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+};
+
+class WriteTimeSyncNtpServerPort : public ModelCommand
+{
+public:
+    WriteTimeSyncNtpServerPort() : ModelCommand("write")
+    {
+        AddArgument("attr-name", "ntp-server-port");
+        AddArgument("attr-value", INT16_MIN, INT16_MAX, &mValue);
+        ModelCommand::AddArguments();
+    }
+
+    ~WriteTimeSyncNtpServerPort()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x01) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.WriteAttributeNtpServerPort(onSuccessCallback->Cancel(), onFailureCallback->Cancel(), mValue);
+    }
+
+private:
+    chip::Callback::Callback<DefaultSuccessCallback> * onSuccessCallback =
+        new chip::Callback::Callback<DefaultSuccessCallback>(OnDefaultSuccessResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+    int16_t mValue;
+};
+
+/*
+ * Attribute ClusterRevision
+ */
+class ReadTimeSyncClusterRevision : public ModelCommand
+{
+public:
+    ReadTimeSyncClusterRevision() : ModelCommand("read")
+    {
+        AddArgument("attr-name", "cluster-revision");
+        ModelCommand::AddArguments();
+    }
+
+    ~ReadTimeSyncClusterRevision()
+    {
+        delete onSuccessCallback;
+        delete onFailureCallback;
+    }
+
+    CHIP_ERROR SendCommand(ChipDevice * device, uint8_t endpointId) override
+    {
+        ChipLogProgress(chipTool, "Sending cluster (0x0038) command (0x00) on endpoint %" PRIu8, endpointId);
+
+        chip::Controller::TimeSyncCluster cluster;
+        cluster.Associate(device, endpointId);
+        return cluster.ReadAttributeClusterRevision(onSuccessCallback->Cancel(), onFailureCallback->Cancel());
+    }
+
+private:
+    chip::Callback::Callback<Int16uAttributeCallback> * onSuccessCallback =
+        new chip::Callback::Callback<Int16uAttributeCallback>(OnInt16uAttributeResponse, this);
+    chip::Callback::Callback<DefaultFailureCallback> * onFailureCallback =
+        new chip::Callback::Callback<DefaultFailureCallback>(OnDefaultFailureResponse, this);
+};
+
+/*----------------------------------------------------------------------------*\
 | Cluster WakeOnLan                                                   | 0x0503 |
 |------------------------------------------------------------------------------|
 | Commands:                                                           |        |
@@ -25009,6 +25329,24 @@ void registerClusterThreadNetworkDiagnostics(Commands & commands)
 
     commands.Register(clusterName, clusterCommands);
 }
+void registerClusterTimeSync(Commands & commands)
+{
+    const char * clusterName = "TimeSync";
+
+    commands_list clusterCommands = {
+        make_unique<TimeSyncSetUtcTime>(),             //
+        make_unique<DiscoverTimeSyncAttributes>(),     //
+        make_unique<ReadTimeSyncUTCTime>(),            //
+        make_unique<ReadTimeSyncGranularity>(),        //
+        make_unique<ReadTimeSyncTrustedTimeNodeId>(),  //
+        make_unique<WriteTimeSyncTrustedTimeNodeId>(), //
+        make_unique<ReadTimeSyncNtpServerPort>(),      //
+        make_unique<WriteTimeSyncNtpServerPort>(),     //
+        make_unique<ReadTimeSyncClusterRevision>(),    //
+    };
+
+    commands.Register(clusterName, clusterCommands);
+}
 void registerClusterWakeOnLan(Commands & commands)
 {
     const char * clusterName = "WakeOnLan";
@@ -25133,6 +25471,7 @@ void registerClusters(Commands & commands)
     registerClusterThermostat(commands);
     registerClusterThermostatUserInterfaceConfiguration(commands);
     registerClusterThreadNetworkDiagnostics(commands);
+    registerClusterTimeSync(commands);
     registerClusterWakeOnLan(commands);
     registerClusterWiFiNetworkDiagnostics(commands);
     registerClusterWindowCovering(commands);
